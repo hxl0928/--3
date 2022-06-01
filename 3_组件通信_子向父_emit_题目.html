@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="app">
+            <h1>知识点: 组件的通信-自定义事件-$emit</h1>
+            <h1>知识点: 组件中的data和methods</h1>
+            <h1>题目要求:在第一,二题的基础上。<br> 假设(1)infocpn组件中也有自己的data, data中有一个message<br> 即{message:'成绩有误!'}
+                <br> (2)组件中有一个按钮, 要求点击按钮的时候, 把message的信息传给根组件, 并在指定地方展示
+            </h1>
+            <h3>说明: <br> （1）自定义事件名, 同学们自己起。<br> （1）提示:组件中的data后面跟的是函数。
+                <br> 效果参考ppt。
+            </h3>
+            <div>
+                <h1 style="color: red;">-------------------------------------------------------</h1>
+                <!--在下面使用自己定义的组件-->
+                <infocpn :student="student" v-on:getmessage="getmessage1"></infocpn>
+            </div>
+            <div>
+                <h1 style="color: red;">-------------------------------------------------------</h1>
+                <!--在下面展示传出来的数据-->
+                <h2>{{displayInfo}}</h2>
+            </div>
+
+        </div>
+
+    </div>
+    <template id="infocpn1">
+        <div>
+            <h2>学生姓名:{{student.name}}</h2>
+            <p>数学成绩:{{student.mathscore}}</p>
+            <p>语文成绩:{{student.chinesescore}}</p>
+            <p>英语成绩:{{student.englishscore}}</p>
+            <button v-on:click="sendMessage">反馈</button>
+        </div>
+    </template>
+
+    <script>
+        Vue.component('infocpn', {
+            props: ['student'],
+            data() {
+                return {
+                    message: '成绩有误!'
+                }
+            },
+            template: '#infocpn1',
+            methods: {
+                sendMessage() {
+                    this.$emit("getmessage", this.message);
+                }
+            },
+        });
+        //创建Vue实例,得到 ViewModel
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                displayInfo: '最后请展示在这里',
+                student: {
+                    name: '黄晓琳',
+                    mathscore: 100,
+                    chinesescore: 100,
+                    englishscore: 99
+                }
+            },
+            methods: {
+                getmessage1(message) {
+                    this.displayInfo = message;
+                }
+            },
+        });
+    </script>
+</body>
+<style>
+    p {
+        font-weight: 600;
+    }
+</style>
+
+</html>
